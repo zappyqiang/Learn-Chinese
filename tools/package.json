@@ -1,0 +1,7 @@
+{
+  "name": "learn-chinese-tools",
+  "private": true,
+  "description": "Build helpers: validate lesson data and vendor stroke-order data for the characters used.",
+  "scripts": { "build": "node build.js" },
+  "dependencies": { "hanzi": "^2.1.5", "hanzi-writer": "^3.7.2", "hanzi-writer-data": "^2.0.1" }
+}

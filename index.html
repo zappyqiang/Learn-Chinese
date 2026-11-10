@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>汉语乐园 · Chinese Playground — learn Chinese with stories and games</title>
+<meta name="description" content="A free web game for learning Mandarin Chinese: everyday sentences with pinyin and sound, stroke-by-stroke writing, how characters evolved, classic poems and stories, and memory games.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐼</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Liu+Jian+Mao+Cao&family=Ma+Shan+Zheng&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="#home"><span class="brand-e">🐼</span><span class="brand-t"><b lang="zh-Hans">汉语乐园</b><small>Chinese Playground</small></span></a>
+  <nav aria-label="Main">
+    <a href="#home"><span>🏠</span>Home</a>
+    <a href="#daily"><span>🗣️</span>Daily</a>
+    <a href="#classics"><span>📚</span>Classics</a>
+    <a href="#games"><span>🎮</span>Games</a>
+    <a href="#lab"><span>🔬</span>Lab</a>
+    <a href="#progress"><span>🏆</span>Me</a>
+  </nav>
+  <a class="starbox" id="starbox" href="#progress" title="My progress"><span id="level"></span><b>⭐ <span id="stars">0</span></b></a>
+</header>
+
+<main id="view"></main>
+
+<footer class="foot">
+  <p>汉语乐园 Chinese Playground · made for curious learners of every age · <a href="#progress">credits &amp; settings</a></p>
+</footer>
+
+<div id="modal" role="dialog" aria-modal="true" aria-label="Word details">
+  <div id="modal-box">
+    <button id="modal-close" aria-label="Close">✕</button>
+    <div id="modal-body"></div>
+  </div>
+</div>
+<div id="toast" role="status" aria-live="polite"></div>
+<noscript><p style="padding:2rem">This learning game needs JavaScript. Please turn it on and reload.</p></noscript>
+
+<script src="vendor/hanzi-writer.min.js"></script>
+<script src="data/lexicon.js"></script>
+<script src="data/daily.js"></script>
+<script src="data/classics.js"></script>
+<script src="data/chars.js"></script>
+<script src="js/core.js"></script>
+<script src="js/evolution.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/games.js"></script>
+<script>LC.ui.start();</script>
+</body>
+</html>
