@@ -16,7 +16,7 @@
 
   /* "我 想 买 苹果 。"  ->  [{w,py,en,emoji}|{punct,w}]   inline override: 行/háng/row,_line */
   LC.parse = function (text) {
-    return text.trim().split(/\s+/).map(function (tok) {
+    return sandhi(text.trim().split(/\s+/).map(function (tok) {
       if (PUNCT.test(tok)) return { w: tok, punct: true };
       if (tok.indexOf('/') > 0) {
         var p = tok.split('/'), base = LC.lexicon[p[0]] || {};
@@ -25,8 +25,22 @@
       var e = LC.lexicon[tok];
       if (!e) return { w: tok, missing: true, py: '', en: '' };
       return { w: e.w, py: e.py, en: e.en, emoji: e.emoji };
-    });
+    }));
   };
+  /* Tone changes that learners' books write out: 一 → yí before a 4th tone, yì before tones 1–3; 不 → bú before a 4th tone. */
+  function sandhi(toks) {
+    toks.forEach(function (t, i) {
+      if (t.punct || t.special || (t.w !== '一' && t.w !== '不')) return;
+      var prev = toks[i - 1], next = toks[i + 1];
+      if (!next || next.punct || !next.py) return;
+      var nt = LC.toneOf(next.py.split(' ')[0]);
+      if (t.w === '不') { if (nt === 4) t.py = 'bú'; return; }
+      if (prev && prev.w === '第') return;
+      if (prev && prev.w === next.w) { t.py = 'yi'; return; }
+      t.py = nt === 4 ? 'yí' : nt === 5 ? 'yí' : 'yì';
+    });
+    return toks;
+  }
   LC.plain = function (text) { return text.replace(/\/[^\s]*/g, '').replace(/\s+/g, ''); };
 
   /* ---------- pinyin ---------- */

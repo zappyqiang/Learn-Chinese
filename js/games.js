@@ -8,7 +8,7 @@
   LC.gameList = [
     { id: 'match', emoji: '🃏', name: 'Memory Match', zh: '翻翻乐', desc: 'Flip the cards and pair each word with its meaning.', color: '#ff8a5c' },
     { id: 'listen', emoji: '👂', name: 'Listen & Pick', zh: '听一听', desc: 'Hear a word and tap the right characters.', color: '#5cc8ff' },
-    { id: 'balloon', emoji: '🎈', name: 'Balloon Pop', zh: '打气球', desc: 'Pop the balloon that matches the meaning before it flies away!', color: '#ff6f91' },
+    { id: 'balloon', emoji: '🎈', name: 'Balloon Pop', zh: '打气球', desc: 'Pop the balloon that matches the meaning before it flies away! A star for every first-try pop.', color: '#ff6f91' },
     { id: 'build', emoji: '🧩', name: 'Sentence Builder', zh: '连词成句', desc: 'Put the mixed-up words back in the right order.', color: '#4dd0a7' },
     { id: 'tone', emoji: '🎵', name: 'Tone Master', zh: '声调大师', desc: 'Listen and choose the right tone: mā, má, mǎ or mà?', color: '#ab7df6' },
     { id: 'blank', emoji: '📜', name: 'Fill the Blank', zh: '填空', desc: 'A word is missing from a famous line. Which one?', color: '#f9a825' },
@@ -162,19 +162,19 @@
     var i = 0;
     function round() {
       if (i >= qs.length || lives <= 0) return c.finish(lives <= 0 ? 'No more lives — 再来一次! Try again!' : null);
-      var t = qs[i++], over = false; c.round(i, qs.length); c.stage.innerHTML = '';
+      var t = qs[i++], over = false, slipped = false; c.round(i, qs.length); c.stage.innerHTML = '';
       var opts = LC.shuffle([t].concat(distinct(c.words, t, 4)));
       var sky = h('div', { class: 'sky' });
       c.stage.appendChild(h('div', { class: 'qbox slim' }, [h('span', { class: 'qemoji' }, t.emoji), h('b', { class: 'qen' }, t.en), h('span', { class: 'lives' }, '❤️'.repeat(lives) + '🤍'.repeat(3 - lives))]));
       c.stage.appendChild(sky);
-      function end(ok) { if (over) return; over = true; if (ok) { c.point(); c.hit(t); } else { lives--; c.miss(t); LC.sfx('bad'); Array.prototype.forEach.call(sky.children, function (b) { if (b._t === t) b.classList.add('show'); }); } later(round, ok ? 900 : 1900); }
+      function end(ok) { if (over) return; over = true; if (ok) { if (!slipped) c.point(); c.hit(t); } else { lives--; c.miss(t); LC.sfx('bad'); Array.prototype.forEach.call(sky.children, function (b) { if (b._t === t) b.classList.add('show'); }); } later(round, ok ? 900 : 1900); }
       opts.forEach(function (o, k) {
         var b = h('button', { class: 'balloon', style: { left: 4 + k * 19 + '%', '--bc': colors[(k + i) % colors.length], 'animation-duration': 8 + Math.random() * 3 + 's', 'animation-delay': Math.random() * 1.2 + 's' } }, wordFace(o, S.pinyin));
         b._t = o;
         b.addEventListener('click', function () {
           if (over) return;
           if (o === t) { b.classList.add('pop'); LC.sfx('pop'); LC.speak(t.w); end(true); }
-          else { b.classList.add('nope'); LC.sfx('bad'); c.miss(o); }
+          else { slipped = true; b.classList.add('nope'); LC.sfx('bad'); c.miss(o); }
         });
         if (o === t) b.addEventListener('animationend', function (e) { if (e.animationName === 'balloon-up') end(false); });
         sky.appendChild(b);

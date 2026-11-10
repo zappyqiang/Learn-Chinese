@@ -431,6 +431,16 @@
     } }, '✍️ Write it');
     box.appendChild(h('section', { class: 'cbox write' }, [h('h3', null, '✍️ How to write it'), target, status, h('div', { class: 'wbtnrow' }, [bPlay, bStep, bQuiz])]));
 
+    /* --- 4. meanings & example words --- */
+    var ex = Object.keys(LC.lexicon).filter(function (w) { return w.length > 1 && w.indexOf(c) >= 0; }).slice(0, 10);
+    box.appendChild(h('section', { class: 'cbox mean' }, [
+      h('h3', null, '📖 What it means'),
+      h('ul', { class: 'defs' }, info.r.length ? info.r.map(function (r) { return h('li', null, [h('b', { class: toneClass(r[0]) }, r[0]), ' — ' + r[1]]); }) : [h('li', null, (LC.lexicon[c] || {}).en || '')]),
+      info.f ? h('p', { class: 'note' }, 'It is about the #' + info.f + ' most-used character in Chinese' + (info.f <= 300 ? ' — super useful! 🌟' : '.')) : null,
+      ex.length ? h('h4', null, 'Words with ' + c) : null,
+      ex.length ? h('div', { class: 'wordgrid small' }, ex.map(function (w) { var e = LC.lexicon[w]; return h('button', { class: 'wchip', onclick: function () { ui.openWord(e, true); } }, [h('span', { class: 'wc-e' }, e.emoji), h('span', { class: 'wc-h', lang: 'zh-Hans' }, e.w), h('span', { class: 'wc-p' }, e.py.replace(/ /g, '')), h('span', { class: 'wc-m' }, e.en)]); })) : null
+    ]));
+
     /* --- 3. story / evolution --- */
     var evo = LC.evolution[c], comp = LC.compounds[c];
     if (evo) box.appendChild(evolutionBox(c, evo));
@@ -443,16 +453,6 @@
         scriptStyles(c)
       ]));
     }
-
-    /* --- 4. meanings & example words --- */
-    var ex = Object.keys(LC.lexicon).filter(function (w) { return w.length > 1 && w.indexOf(c) >= 0; }).slice(0, 10);
-    box.appendChild(h('section', { class: 'cbox mean' }, [
-      h('h3', null, '📖 What it means'),
-      h('ul', { class: 'defs' }, info.r.length ? info.r.map(function (r) { return h('li', null, [h('b', { class: toneClass(r[0]) }, r[0]), ' — ' + r[1]]); }) : [h('li', null, (LC.lexicon[c] || {}).en || '')]),
-      info.f ? h('p', { class: 'note' }, 'It is about the #' + info.f + ' most-used character in Chinese' + (info.f <= 300 ? ' — super useful! 🌟' : '.')) : null,
-      ex.length ? h('h4', null, 'Words with ' + c) : null,
-      ex.length ? h('div', { class: 'wordgrid small' }, ex.map(function (w) { var e = LC.lexicon[w]; return h('button', { class: 'wchip', onclick: function () { ui.openWord(e, true); } }, [h('span', { class: 'wc-e' }, e.emoji), h('span', { class: 'wc-h', lang: 'zh-Hans' }, e.w), h('span', { class: 'wc-p' }, e.py.replace(/ /g, '')), h('span', { class: 'wc-m' }, e.en)]); })) : null
-    ]));
 
     /* --- 5. references --- */
     var q = encodeURIComponent(c);
